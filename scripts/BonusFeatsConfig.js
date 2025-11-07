@@ -71,7 +71,7 @@ export class BonusFeatsConfig extends HandlebarsApplicationMixin(ApplicationV2) 
                         id: "pf2e-bonus-feats-" + foundry.utils.randomID(),
                         label: data.label || "Custom Feat Section",
                         supported: !data.supported ? [] : data.supported,
-                        slots: !data.slots ? [] : data.slots.split(/,\s*/).map(Number)
+                        slots: !data.slots ? [] : data.slots.split(/,\s*/).map(Number).sort(function(a, b) {return a - b;})
                     }
 
                     this.featSections.push(newSection);
