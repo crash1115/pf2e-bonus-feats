@@ -68,7 +68,7 @@ export class BonusFeatsConfig extends HandlebarsApplicationMixin(ApplicationV2) 
                     
                     let newSection = {
                         id: data.id,
-                        label: data.label,
+                        label: data.label || "Custom Feat Section",
                         supported: !data.supported ? [] : data.supported,
                         slots: !data.slots ? [] : data.slots.split(/,\s*/).map(Number)
                     }
