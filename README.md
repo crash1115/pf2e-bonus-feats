@@ -3,3 +3,4 @@ A module for the pf2e game system on Foundry VTT that lets you configure additio
 
 <img width="1753" height="852" alt="image" src="https://github.com/user-attachments/assets/75b592de-8600-47f3-999e-bd32ab5dc57c" />
 
+Install via manifest URL: `https://github.com/crash1115/pf2e-bonus-feats/releases/latest/download/module.json`
