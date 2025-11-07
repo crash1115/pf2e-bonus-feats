@@ -16,6 +16,9 @@ export class BonusFeatsConfig extends HandlebarsApplicationMixin(ApplicationV2) 
             resizable: true,
             title: "Configure Custom Feat Sections",
         },
+        position: {
+            width: 900
+        },
         actions: {
             addSection: BonusFeatsConfig.addFeatSections,
             removeSection: BonusFeatsConfig.removeFeatSection,
