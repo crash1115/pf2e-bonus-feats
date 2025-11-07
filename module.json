@@ -1,0 +1,44 @@
+{
+  "id": "pf2e-bonus-feats",
+  "title": "PF2e Bonus Feats",
+  "version": "0.13.0",
+  "download": "https://github.com/crash1115/pf2e-bonus-feats/releases/download/0.13.0/module.zip",
+  "manifest": "https://github.com/crash1115/pf2e-bonus-feats/releases/latest/download/module.json",
+  "url": "https://github.com/crash1115/pf2e-bonus-feats",
+  "compatibility": {
+      "minimum": "13",
+      "verified": "13"
+  },
+  "relationships": {
+      "systems": [
+          {
+              "id": "pf2e",
+              "type": "system",
+              "compatibility": {}
+          }
+      ]
+  },
+  "authors": [
+      {
+          "name": "CRASH1115",
+          "url": "https://github.com/crash1115",
+          "discord": "crash1115",
+          "flags": {}
+      }
+  ],
+  "esmodules": [
+      "./scripts/pf2e-bonus-feats.js"
+  ],
+  "styles": [
+      "./styles/pf2e-bonus-feats.css"
+  ],
+  "flags": {
+      "hotReload": {
+          "extensions": [
+              "hbs",
+              "html",
+              "css"
+          ]
+      }
+  }
+}

@@ -1,0 +1,24 @@
+<div class="pf2e-bonus-feats-feat-config">
+    <p>Press the Save button below for any changes made here to take effect. You'll need to restart Foundry for the changes to show up on any sheets. Closing the window without pressing Save will revert all changes.</p>
+    <table>
+        <tr>
+            <th>Section Label</th>
+            <th>Feat Types</th>
+            <th>Levels</th>
+            <th><button type="button" data-action="addSection"><i class="fa-regular fa-plus"></i>Add Section</button></th>
+        </tr>
+        {{#each featSections as |section i|}}
+        <tr>
+            <td>{{section.label}}</td>
+            <td>{{#each section.supported as |type t|}} <div class="tag">{{type}}</div> {{/each}}</td>
+            <td>{{#each section.slots as |level l|}} <div class="tag">{{level}}</div> {{/each}}</td>
+            <td><button type="button" data-action="removeSection" data-section-id="{{section.id}}"><i class="fas fa-trash"></i></button></td>
+        </tr>
+        {{/each}}
+    </table>
+    
+    <footer class="form-footer">
+        <button type="button" data-action="saveSections"><i class="fa-solid fa-floppy-disk"></i> Save Changes</button>
+    </footer>
+    
+</div>
