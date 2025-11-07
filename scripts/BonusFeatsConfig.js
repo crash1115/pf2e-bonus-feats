@@ -1,6 +1,6 @@
 import { MODULE_ID } from "./settings.js";
-
 const { ApplicationV2, HandlebarsApplicationMixin } = foundry.applications.api;
+
 export class BonusFeatsConfig extends HandlebarsApplicationMixin(ApplicationV2) {
     constructor(object, options) {
         super(object, options);
@@ -41,18 +41,18 @@ export class BonusFeatsConfig extends HandlebarsApplicationMixin(ApplicationV2) 
 
     static async addFeatSections(event) {
         const randomId = "pf2e-bonus-feats-" + foundry.utils.randomID();
+        const featTypeOptions = Object.keys(CONFIG.PF2E.featCategories).map(key => ({value:key, label:game.i18n.localize(CONFIG.PF2E.featCategories[key]), selected: false}));
+        const slotsHint = "Leaving this blank will not populate level based slots into the section. Otherwise, it expects a comma separated list. Entering the same number more than once will add additional slots at that level. Ex: 1, 1, 5, 7";
 
-        let data = {
-            fields: {
-                id: new foundry.data.fields.StringField({ label: "Section Id", initial:randomId }, { name: "id" }),
-                label: new foundry.data.fields.StringField({ label: "Section Label", initial: "New Section" }, { name: "name" }),
-                supported: new foundry.data.fields.StringField({ label: "Supported Feat Types", hint:"Leaving this blank will allow any type of feat to go in these slots. Otherwise, it expects a comma separated list. Accepted values can be found in CONFIG.PF2E.featCategories. Ex: ancestry, class, general, skill" }, { name: "supported" }),
-                slots: new foundry.data.fields.StringField({ label: "Grant At Levels", hint:"Leaving this blank will not populate level based slots into the section. Otherwise, it expects a comma separated list. Entering the same number more than once will add additional slots at that level. Ex: 1, 1, 5, 7" }, { name: "slots" }),
-            }
-        };
-
-        let content = await foundry.applications.handlebars.renderTemplate("modules/pf2e-bonus-feats/templates/add-section.hbs", data);
+        const idField = new foundry.data.fields.StringField({label: "Id", initial:randomId}).toFormGroup({hidden: true},{name:"id"}).outerHTML;
+        const labelField = new foundry.data.fields.StringField({label: "Section Label", initial: "New Section", required: true}).toFormGroup({},{name:"label"}).outerHTML;      
         
+        const typeCheckboxes = foundry.applications.fields.createMultiSelectInput({type: "checkboxes", name: "supported", options: featTypeOptions });
+        const supportedField = foundry.applications.fields.createFormGroup({label: "Allowed Feat Types", input: typeCheckboxes}).outerHTML;
+                
+        const slotsField = new foundry.data.fields.StringField({label: "Grant At Levels", hint: slotsHint}).toFormGroup({},{name:"slots"}).outerHTML;    ;
+        let content = idField + labelField + supportedField + slotsField;
+
         foundry.applications.api.DialogV2.wait({
             id: "pf2e-bonus-feats-add-section-dialog",
             window: {
@@ -67,26 +67,19 @@ export class BonusFeatsConfig extends HandlebarsApplicationMixin(ApplicationV2) 
                 label: "Add",
                 icon: "fa-regular fa-plus",
                 callback: async (event, button) => {
-                    let form = $(button.form);
-
-                    let id = form.find("input[name='id']").val();
-                    let label = form.find("input[name='name']").val();
-                    let supported = form.find("input[name='supported']").val();
-                    let slots = form.find("input[name='slots']").val();
-
-                    let s = { id, label, supported, slots };
-
-                    let formatted = {
-                        id: s.id,
-                        label: s.label,
-                        supported: !s.supported ? [] : s.supported.split(/,\s*/),
-                        slots: !s.slots ? [] : s.slots.split(/,\s*/).map(Number)
+                    const data = new FormDataExtended(button.form).object;
+                    
+                    let newSection = {
+                        id: data.id,
+                        label: data.label,
+                        supported: !data.supported ? [] : data.supported,
+                        slots: !data.slots ? [] : data.slots.split(/,\s*/).map(Number)
                     }
 
-                    this.featSections.push(formatted);
+                    this.featSections.push(newSection);
                     this.render(true);
                 },
-                default: true
+                default: false
             }],
         });
     }
