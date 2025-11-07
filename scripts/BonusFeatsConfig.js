@@ -21,9 +21,6 @@ export class BonusFeatsConfig extends HandlebarsApplicationMixin(ApplicationV2) 
             removeSection: BonusFeatsConfig.removeFeatSection,
             saveSections: BonusFeatsConfig.saveFeatSections
         },
-        position: {
-            width: 800
-        }
     };
 
     static PARTS = {
