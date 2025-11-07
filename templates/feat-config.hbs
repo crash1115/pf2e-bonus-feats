@@ -14,7 +14,10 @@
                 {{#each section.supported as |type t|}} <div class="tag">{{pf2eBonusFeatsFormatTagLabel type}}</div> {{else}} <div class="tag">Any</div> {{/each}}
             </td>
             <td>{{#each section.slots as |level l|}} <div class="tag">{{level}}</div> {{else}} <div class="tag">None Selected</div> {{/each}}</td>
-            <td><button type="button" data-action="removeSection" data-section-id="{{section.id}}"><i class="fas fa-trash"></i></button></td>
+            <td>
+                <button type="button" data-action="removeSection" data-section-id="{{section.id}}"><i class="fas fa-trash"></i></button>
+                <button type="button" data-action="editSection" data-section-id="{{section.id}}"><i class="fas fa-pencil"></i></button>
+            </td>
         </tr>
         {{/each}}
     </table>

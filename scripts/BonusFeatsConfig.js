@@ -20,7 +20,8 @@ export class BonusFeatsConfig extends HandlebarsApplicationMixin(ApplicationV2) 
             width: 900
         },
         actions: {
-            addSection: BonusFeatsConfig.addFeatSections,
+            addSection: BonusFeatsConfig.addFeatSection,
+            editSection: BonusFeatsConfig.editFeatSection,
             removeSection: BonusFeatsConfig.removeFeatSection,
             saveSections: BonusFeatsConfig.saveFeatSections
         },
@@ -39,15 +40,14 @@ export class BonusFeatsConfig extends HandlebarsApplicationMixin(ApplicationV2) 
         return context;
     }
 
-    static async addFeatSections(event) {
-        const featTypeOptions = Object.keys(CONFIG.PF2E.featCategories).map(key => ({value:key, label:game.i18n.localize(CONFIG.PF2E.featCategories[key]), selected: false}));
-        const slotsHint = "Leaving this blank will not populate level based slots into the section. Otherwise, it expects a comma separated list. Entering the same number more than once will add additional slots at that level. Ex: 1, 1, 5, 7";
-
+    static async addFeatSection(event) {
         const labelField = new foundry.data.fields.StringField({label: "Section Label", initial: "New Section", required: true}).toFormGroup({},{name:"label"}).outerHTML;      
         
+        const featTypeOptions = Object.keys(CONFIG.PF2E.featCategories).map(key => ({value:key, label:game.i18n.localize(CONFIG.PF2E.featCategories[key]), selected: false}));
         const typeCheckboxes = foundry.applications.fields.createMultiSelectInput({type: "checkboxes", name: "supported", options: featTypeOptions });
         const supportedField = foundry.applications.fields.createFormGroup({label: "Allowed Feat Types", input: typeCheckboxes}).outerHTML;
-                
+        
+        const slotsHint = "Leaving this blank will not populate level based slots into the section. Otherwise, it expects a comma separated list. Entering the same number more than once will add additional slots at that level. Ex: 1, 1, 5, 7";
         const slotsField = new foundry.data.fields.StringField({label: "Grant At Levels", hint: slotsHint}).toFormGroup({},{name:"slots"}).outerHTML;    ;
         let content = labelField + supportedField + slotsField;
 
@@ -65,16 +65,63 @@ export class BonusFeatsConfig extends HandlebarsApplicationMixin(ApplicationV2) 
                 label: "Add",
                 icon: "fa-regular fa-plus",
                 callback: async (event, button) => {
-                    const data = new FormDataExtended(button.form).object;
+                    const data = new foundry.applications.ux.FormDataExtended(button.form).object;
                     
                     let newSection = {
                         id: "pf2e-bonus-feats-" + foundry.utils.randomID(),
                         label: data.label || "Custom Feat Section",
                         supported: !data.supported ? [] : data.supported,
                         slots: !data.slots ? [] : data.slots.split(/,\s*/).map(Number).sort(function(a, b) {return a - b;})
-                    }
+                    };
 
                     this.featSections.push(newSection);
+                    this.render(true);
+                },
+                default: false
+            }],
+        });
+    }
+
+    static async editFeatSection(event) {
+        const sectionIdToEdit = event.target.dataset.sectionId;
+        let sectionToEdit = foundry.utils.duplicate(this.featSections.filter(s => s.id === sectionIdToEdit)[0]);
+        
+        const labelField = new foundry.data.fields.StringField({label: "Section Label", initial: sectionToEdit.label, required: true}).toFormGroup({},{name:"label"}).outerHTML;      
+        
+        const featTypeOptions = Object.keys(CONFIG.PF2E.featCategories).map(key => ({value:key, label:game.i18n.localize(CONFIG.PF2E.featCategories[key]), selected: sectionToEdit.supported.includes(key)}));
+        const typeCheckboxes = foundry.applications.fields.createMultiSelectInput({type: "checkboxes", name: "supported", options: featTypeOptions });
+        const supportedField = foundry.applications.fields.createFormGroup({label: "Allowed Feat Types", input: typeCheckboxes}).outerHTML;
+        
+        const slotsHint = "Leaving this blank will not populate level based slots into the section. Otherwise, it expects a comma separated list. Entering the same number more than once will add additional slots at that level. Ex: 1, 1, 5, 7";
+        const slotsField = new foundry.data.fields.StringField({label: "Grant At Levels", hint: slotsHint, initial: sectionToEdit.slots}).toFormGroup({},{name:"slots"}).outerHTML;    ;
+        let content = labelField + supportedField + slotsField;
+
+        foundry.applications.api.DialogV2.wait({
+            id: "pf2e-bonus-feats-edit-section-dialog",
+            window: {
+                title: `Edit Section`,
+            },
+            position: {
+                width: 600
+            },
+            content,
+            buttons: [{
+                action: "automatic",
+                label: "Edit",
+                icon: "fa-regular fa-pencil",
+                callback: async (event, button) => {
+                    const data = new foundry.applications.ux.FormDataExtended(button.form).object;
+                    
+                    let newSection = {
+                        id: sectionIdToEdit,
+                        label: data.label || "Custom Feat Section",
+                        supported: !data.supported ? [] : data.supported,
+                        slots: !data.slots ? [] : data.slots.split(/,\s*/).map(Number).sort(function(a, b) {return a - b;})
+                    };
+
+                    const idx = this.featSections.findIndex(s => s.id === sectionIdToEdit);
+                    if(idx === -1) return;
+                    this.featSections[idx] = newSection;
                     this.render(true);
                 },
                 default: false
