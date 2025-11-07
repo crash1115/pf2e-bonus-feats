@@ -8,7 +8,8 @@ export function registerSettings() {
         icon: "fas fa-wrench",
         type: BonusFeatsConfig,
         restricted: true,
-        requiresReload: true
+        requiresReload: true,
+        hint: "Configure additional feat sections to display on the feats tab of PC sheets. Choose what type of feats can go in each section, and what levels you get them at."
     });
 
     game.settings.register(MODULE_ID, 'customFeatSections', {

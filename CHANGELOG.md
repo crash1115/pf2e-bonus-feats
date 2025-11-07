@@ -1,2 +1,5 @@
-# pf2e-bonus-feats
-A module for the pf2e game system on Foundry VTT that lets you configure
+## Version 0.13.1
+- Added a hint to the settings menu
+
+## Version 0.13.0
+- Initial release
