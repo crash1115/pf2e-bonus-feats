@@ -37,18 +37,16 @@ export class BonusFeatsConfig extends HandlebarsApplicationMixin(ApplicationV2) 
     }
 
     static async addFeatSections(event) {
-        const randomId = "pf2e-bonus-feats-" + foundry.utils.randomID();
         const featTypeOptions = Object.keys(CONFIG.PF2E.featCategories).map(key => ({value:key, label:game.i18n.localize(CONFIG.PF2E.featCategories[key]), selected: false}));
         const slotsHint = "Leaving this blank will not populate level based slots into the section. Otherwise, it expects a comma separated list. Entering the same number more than once will add additional slots at that level. Ex: 1, 1, 5, 7";
 
-        const idField = new foundry.data.fields.StringField({label: "Id", initial:randomId}).toFormGroup({hidden: true},{name:"id"}).outerHTML;
         const labelField = new foundry.data.fields.StringField({label: "Section Label", initial: "New Section", required: true}).toFormGroup({},{name:"label"}).outerHTML;      
         
         const typeCheckboxes = foundry.applications.fields.createMultiSelectInput({type: "checkboxes", name: "supported", options: featTypeOptions });
         const supportedField = foundry.applications.fields.createFormGroup({label: "Allowed Feat Types", input: typeCheckboxes}).outerHTML;
                 
         const slotsField = new foundry.data.fields.StringField({label: "Grant At Levels", hint: slotsHint}).toFormGroup({},{name:"slots"}).outerHTML;    ;
-        let content = idField + labelField + supportedField + slotsField;
+        let content = labelField + supportedField + slotsField;
 
         foundry.applications.api.DialogV2.wait({
             id: "pf2e-bonus-feats-add-section-dialog",
@@ -67,7 +65,7 @@ export class BonusFeatsConfig extends HandlebarsApplicationMixin(ApplicationV2) 
                     const data = new FormDataExtended(button.form).object;
                     
                     let newSection = {
-                        id: data.id,
+                        id: "pf2e-bonus-feats-" + foundry.utils.randomID(),
                         label: data.label || "Custom Feat Section",
                         supported: !data.supported ? [] : data.supported,
                         slots: !data.slots ? [] : data.slots.split(/,\s*/).map(Number)
