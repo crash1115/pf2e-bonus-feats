@@ -38,3 +38,9 @@ Hooks.once("ready", () => {
         game.settings.set("pf2e", "campaignFeatSections", updatedCampaignFeatSections);
     }
 });
+
+Handlebars.registerHelper("pf2eBonusFeatsFormatTagLabel", function (value) {
+    const locKey = CONFIG.PF2E.featCategories[value];
+    const formattedLabel = game.i18n.localize(locKey);
+    return formattedLabel;
+});
