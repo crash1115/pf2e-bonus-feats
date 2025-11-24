@@ -5,7 +5,10 @@ Hooks.on('init', () => {
 })
 
 Hooks.once("ready", () => {
+    updateCustomFeats();
+});
 
+export function updateCustomFeats(){
     const customFeatSections = game.settings.get(MODULE_ID, "customFeatSections");
 
     if (customFeatSections) {
@@ -37,7 +40,8 @@ Hooks.once("ready", () => {
         // Update the setting
         game.settings.set("pf2e", "campaignFeatSections", updatedCampaignFeatSections);
     }
-});
+}
+
 
 Handlebars.registerHelper("pf2eBonusFeatsFormatTagLabel", function (value) {
     const locKey = CONFIG.PF2E.featCategories[value];

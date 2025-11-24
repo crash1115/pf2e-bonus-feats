@@ -1,3 +1,4 @@
+import { updateCustomFeats } from "./pf2e-bonus-feats.js";
 import { MODULE_ID } from "./settings.js";
 const { ApplicationV2, HandlebarsApplicationMixin } = foundry.applications.api;
 
@@ -139,7 +140,6 @@ export class BonusFeatsConfig extends HandlebarsApplicationMixin(ApplicationV2) 
 
     static async saveFeatSections(event) {
         await game.settings.set(MODULE_ID, "customFeatSections", this.featSections); 
-        game.settings.sheet.constructor.reloadConfirm();
+        updateCustomFeats();
     }
-
 }
