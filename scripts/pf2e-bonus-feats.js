@@ -5,7 +5,9 @@ Hooks.on('init', () => {
 })
 
 Hooks.once("ready", () => {
-    updateCustomFeats();
+    if(game.user.isGM) {
+        updateCustomFeats();
+    }
 });
 
 export function updateCustomFeats(){

@@ -1,3 +1,6 @@
+## Version 0.13.3
+- The setting for sections is now, appropriately, a world setting, rather than a client setting. Should prevent weirdness going forward, but you'll probly have to update.
+
 ## Version 0.13.2
 - You no longer have to reload for changes to take effect
 

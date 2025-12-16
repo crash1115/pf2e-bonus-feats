@@ -13,7 +13,7 @@ export function registerSettings() {
     });
 
     game.settings.register(MODULE_ID, 'customFeatSections', {
-        scope: 'client',
+        scope: 'world',
         config: false,
         type: Object,
         default: [],
