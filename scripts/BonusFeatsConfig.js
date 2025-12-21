@@ -141,5 +141,7 @@ export class BonusFeatsConfig extends HandlebarsApplicationMixin(ApplicationV2) 
     static async saveFeatSections(event) {
         await game.settings.set(MODULE_ID, "customFeatSections", this.featSections); 
         updateCustomFeats();
+        ui.notifications.notify("Feat sections updated. Changes should be visible on all sheets immediately.");
+        this.close();
     }
 }
