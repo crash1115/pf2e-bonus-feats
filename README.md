@@ -1,3 +1,5 @@
+If you're looking for support for specific optional sets of feats, like Skill Paragon, check out Hawk's module [here](https://github.com/digitalshadowhawk/pf2e-sf2e-extra-feat-slots)! It incorporates all the features of this module, plus a few preconfigured sets of additional feat slots.
+
 # pf2e-bonus-feats
 A module for the pf2e game system on Foundry VTT that lets you configure additional sections to display on the Feats tab of the PC sheet. Useful if you want to grant extra feats of certain types at certain levels, like in the Feats+ variant rules. Should be fully compatible with PF2e Workbench's Ancestry Paragon. Works with light and dark themes.
 
