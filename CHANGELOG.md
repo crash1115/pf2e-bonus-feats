@@ -1,3 +1,7 @@
+## Version 0.14.0
+- Compatibility with Foundry v14
+- Backwards compatible with Foundry v13
+
 ## Version 0.13.4
 - Improved clarity of saving settings; there's now a notification that tells you it did the thing.
 
